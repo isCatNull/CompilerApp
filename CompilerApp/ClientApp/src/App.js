@@ -19,6 +19,6 @@ export default class App extends Component {
         <Route path='/fetch-data' component={FetchData} />
         <Route path='/challenge' component={Challenge} />
       </Layout>
-    );
+    ); 
   }
 }
