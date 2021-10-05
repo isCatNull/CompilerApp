@@ -5,6 +5,6 @@ namespace CompilerApp.Interfaces
 {
     public interface ICompilerService
     {
-        Task CompileAsync(CompilerRequestDTO compilerRequestDTO);
+        Task<CompilerResponseDTO> CompileAsync(CompilerRequestDTO compilerRequestDTO);
     }
 }

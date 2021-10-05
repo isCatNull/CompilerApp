@@ -25,7 +25,7 @@ namespace CompilerApp.Services
         {
             _httpClient = httpClient;
         }
-        public async Task CompileAsync(CompilerRequestDTO compilerRequestDTO)
+        public async Task<CompilerResponseDTO> CompileAsync(CompilerRequestDTO compilerRequestDTO)
         {
             var content = new StringContent(
                 content: JsonSerializer.Serialize(compilerRequestDTO, _serialezitionOptions),
@@ -38,11 +38,26 @@ namespace CompilerApp.Services
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var successfulResponse = JsonSerializer.Deserialize<SuccessfulCompilerResponse>(responseContent, _deserialiazitionOptions);
+
+                return new CompilerResponseDTO
+                {
+                    Output = successfulResponse.Output,
+                    StatusCode = successfulResponse.StatusCode,
+                    Memory = successfulResponse.Memory,
+                    CpuTime = successfulResponse.CpuTime
+                };
             }
             else
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var unsuccessfulResponse = JsonSerializer.Deserialize<UnsuccessfulCompilerResponse>(responseContent, _deserialiazitionOptions);
+
+                return new CompilerResponseDTO
+                {
+                    Error = unsuccessfulResponse.Error,
+                    StatusCode = unsuccessfulResponse.StatusCode
+                };
+
             }
         }
     }

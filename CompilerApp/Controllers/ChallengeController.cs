@@ -25,20 +25,24 @@ namespace ConstrolerApp.Controllers
             { 
                 ClientId = _credentials.ClientId,
                 ClientSecret = _credentials.ClientSecret, 
-                Language = "csharp",
+                Language = "python3",
                 Script = challengeFormDTO.SourceCode,
                 StdIn = string.Empty,
                 VersionIndex = "3"
+
+                
             };
         }
 
         [HttpPost("submitTask")]
-        public async Task<IActionResult> SubmitTask(ChallengeFormDTO challengeForm)
+        public async Task<OkObjectResult> SubmitTask(ChallengeFormDTO challengeForm)
         {
             var compilerRequest = MapCompilerRequest(challengeForm);
-            await _compilerService.CompileAsync(compilerRequest);
+            var response = await _compilerService.CompileAsync(compilerRequest);
 
-            return Ok();
+            return Ok(response);
         }
+
+        
     }
 }
