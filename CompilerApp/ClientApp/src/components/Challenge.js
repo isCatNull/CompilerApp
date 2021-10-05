@@ -7,7 +7,7 @@ export class Challenge extends Component {
         super(props);
         this.state = {
             requestName: "",
-            requestSourceCode: "",
+            requestSourceCode: 'print("Hello World")',
             responseOutput: "",
             responseStatusCode: "",
             responseMemory: "",
@@ -52,6 +52,8 @@ export class Challenge extends Component {
     render() {
         return (
             <div>
+                <h1>Challenge</h1>
+                <br></br>
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group row">
                         <label htmlFor="enterName" className="col-sm-2 col-form-label">NAME</label>
@@ -78,7 +80,7 @@ export class Challenge extends Component {
                     </div>
                     <div className="form-group row">
                         <label htmlFor="userCode" className="col-sm-2 col-form-label">SOLUTION CODE</label>
-                        <textarea className="col-sm-10" name="requestSourceCode" onChange={this.handleChange} id="userCode" rows="3"></textarea>
+                        <textarea className="col-sm-10" value={this.state.requestSourceCode} name="requestSourceCode" onChange={this.handleChange} id="userCode" rows="3"></textarea>
                     </div>
                     <button type="submit" className="btn btn-primary">Submit</button>
                 </form>

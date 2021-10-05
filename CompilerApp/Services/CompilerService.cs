@@ -11,12 +11,12 @@ namespace CompilerApp.Services
     {
         private readonly HttpClient _httpClient;
 
-        private readonly JsonSerializerOptions _serialezitionOptions = new JsonSerializerOptions
+        private readonly JsonSerializerOptions _serializationOptions = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         };
 
-        private readonly JsonSerializerOptions _deserialiazitionOptions = new JsonSerializerOptions
+        private readonly JsonSerializerOptions _deserializationOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         };
@@ -25,40 +25,49 @@ namespace CompilerApp.Services
         {
             _httpClient = httpClient;
         }
+
         public async Task<CompilerResponseDTO> CompileAsync(CompilerRequestDTO compilerRequestDTO)
         {
             var content = new StringContent(
-                content: JsonSerializer.Serialize(compilerRequestDTO, _serialezitionOptions),
+                content: JsonSerializer.Serialize(compilerRequestDTO, _serializationOptions),
                 encoding: Encoding.UTF8,
                 mediaType: "application/json");
 
             var response = await _httpClient.PostAsync("https://api.jdoodle.com/v1/execute", content);
+            var responseContent = await response.Content.ReadAsStringAsync();
 
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var successfulResponse = JsonSerializer.Deserialize<SuccessfulCompilerResponse>(responseContent, _deserialiazitionOptions);
-
-                return new CompilerResponseDTO
-                {
-                    Output = successfulResponse.Output,
-                    StatusCode = successfulResponse.StatusCode,
-                    Memory = successfulResponse.Memory,
-                    CpuTime = successfulResponse.CpuTime
-                };
+                return DeserializeSuccessfulResponse(responseContent);
             }
             else
             {
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var unsuccessfulResponse = JsonSerializer.Deserialize<UnsuccessfulCompilerResponse>(responseContent, _deserialiazitionOptions);
-
-                return new CompilerResponseDTO
-                {
-                    Error = unsuccessfulResponse.Error,
-                    StatusCode = unsuccessfulResponse.StatusCode
-                };
-
+                return DeserializeUnsuccessfulResponse(responseContent);
             }
+        }
+
+        private CompilerResponseDTO DeserializeSuccessfulResponse(string responseContent)
+        {
+            var response = JsonSerializer.Deserialize<SuccessfulCompilerResponse>(responseContent, _deserializationOptions);
+
+            return new CompilerResponseDTO
+            {
+                Output = response.Output,
+                StatusCode = response.StatusCode,
+                Memory = response.Memory,
+                CpuTime = response.CpuTime
+            };
+        }
+
+        private CompilerResponseDTO DeserializeUnsuccessfulResponse(string responseContent)
+        {
+            var response = JsonSerializer.Deserialize<UnsuccessfulCompilerResponse>(responseContent, _deserializationOptions);
+
+            return new CompilerResponseDTO
+            {
+                Error = response.Error,
+                StatusCode = response.StatusCode
+            };
         }
     }
 }
