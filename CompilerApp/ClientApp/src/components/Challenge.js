@@ -6,49 +6,46 @@ export class Challenge extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            request: {
-                name: "",
-                sourceCode: ""
-            },
-            response: {
-                output: "",
-                statusCode: "",
-                memory: "",
-                cputime: "",
-                error: ""
-            }
+            requestName: "",
+            requestSourceCode: "",
+            responseOutput: "",
+            responseStatusCode: "",
+            responseMemory: "",
+            responseCpuTime: "",
+            responseError: ""
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-
     handleChange(event) {
         this.setState({
-            request: {
-                [event.target.name]: event.target.value
-            }
+            [event.target.name]: event.target.value
         });
     }
 
     async handleSubmit(event) {
         event.preventDefault();
+
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(this.state.request)
+            body: JSON.stringify({
+                "Name": this.state.requestName,
+                "SourceCode": this.state.requestSourceCode
+            })
         };
+
         const response = await fetch('challenge/submitTask', requestOptions);
         const responseData = await response.json();
+
         this.setState({
-            response: {
-                output: responseData.output,
-                statusCode: responseData.output,
-                memory: responseData.memory,
-                cputime: responseData.cputime,
-                error: responseData.error
-            }
+            responseOutput: responseData.output,
+            responseStatusCode: responseData.statusCode,
+            responseMemory: responseData.memory,
+            responseCpuTime: responseData.cpuTime,
+            responseError: responseData.error
         });
     }
 
@@ -59,7 +56,7 @@ export class Challenge extends Component {
                     <div className="form-group row">
                         <label htmlFor="enterName" className="col-sm-2 col-form-label">NAME</label>
                         <div className="col-sm-10">
-                            <input type="name" name="name" onChange={this.handleChange} id="enterName" />
+                            <input type="name" name="requestName" onChange={this.handleChange} id="enterName" />
                         </div>
                     </div>
 
@@ -81,14 +78,14 @@ export class Challenge extends Component {
                     </div>
                     <div className="form-group row">
                         <label htmlFor="userCode" className="col-sm-2 col-form-label">SOLUTION CODE</label>
-                        <textarea className="col-sm-10" name="sourceCode" onChange={this.handleChange} id="userCode" rows="3"></textarea>
+                        <textarea className="col-sm-10" name="requestSourceCode" onChange={this.handleChange} id="userCode" rows="3"></textarea>
                     </div>
                     <button type="submit" className="btn btn-primary">Submit</button>
                 </form>
 
                 <div>
                     <label>output</label>
-                    <textarea readOnly={true} value={this.state.response.output} ></textarea>
+                    <textarea readOnly={true} value={this.state.responseOutput} ></textarea>
                 </div>
             </div>
         );

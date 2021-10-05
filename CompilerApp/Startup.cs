@@ -1,9 +1,11 @@
+using CompilerApp.Data;
 using CompilerApp.DTOs;
 using CompilerApp.Interfaces;
 using CompilerApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,6 +26,10 @@ namespace CompilerApp
             services.AddControllersWithViews();
             services.AddHttpClient<ICompilerService, CompilerService>();
             services.Configure<CredentialsDTO>(_config.GetSection("Credentials"));
+            services.AddDbContext<DataContext>(options => 
+            {
+                options.UseSqlServer(_config.GetConnectionString("Database"));
+            });
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

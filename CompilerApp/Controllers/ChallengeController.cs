@@ -1,4 +1,6 @@
-﻿using CompilerApp.DTOs;
+﻿using CompilerApp.Data;
+using CompilerApp.DTOs;
+using CompilerApp.Entities;
 using CompilerApp.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -11,11 +13,13 @@ namespace ConstrolerApp.Controllers
     public class ChallengeController : ControllerBase
     {
         private readonly ICompilerService _compilerService;
+        private readonly DataContext _dataContext;
         private readonly CredentialsDTO _credentials;
 
-        public ChallengeController(ICompilerService compilerService, IOptions<CredentialsDTO> credentials)
+        public ChallengeController(ICompilerService compilerService, IOptions<CredentialsDTO> credentials, DataContext dataContext)
         {
             _compilerService = compilerService;
+            _dataContext = dataContext;
             _credentials = credentials.Value;
         }
 
@@ -39,6 +43,20 @@ namespace ConstrolerApp.Controllers
         {
             var compilerRequest = MapCompilerRequest(challengeForm);
             var response = await _compilerService.CompileAsync(compilerRequest);
+
+            var compilationSummary = new CompilationSummary
+            {
+                Name = challengeForm.Name,
+                SourceCode = challengeForm.SourceCode,
+                Output = response.Output,
+                StatusCode = response.StatusCode,
+                Memory = response.Memory,
+                CpuTime = response.CpuTime,
+                Error = response.Error
+            };
+
+            _dataContext.Summaries.Add(compilationSummary);
+            await _dataContext.SaveChangesAsync();
 
             return Ok(response);
         }
