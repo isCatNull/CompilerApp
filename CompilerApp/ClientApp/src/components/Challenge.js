@@ -77,7 +77,7 @@ export class Challenge extends Component {
 
                     <div className="form-group row">
                         <label htmlFor="description" className="col-sm-2 col-form-label">DESCRIPTION</label>
-                        <textarea id="description" className="col-sm-10" readOnly={true} value={'Description about the task'}></textarea>
+                        <textarea id="description" className="col-sm-10" readOnly={true} value={'Please enter Python script.'}></textarea>
                     </div>
                     <div className="form-group row">
                         <label htmlFor="requestSourceCode" className="col-sm-2 col-form-label">SOLUTION CODE</label>

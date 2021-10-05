@@ -3,4 +3,4 @@ Simple one page web service, allows user to call JDoodle compiler API, execute c
 
 ## Running locally
 - Set `Credentials:ClientId` and `Credentials:ClientSecret` with values from JDoodle account in appsettings.json or in your local secrets.json file
-- Run `dotnet ef database update`
+- Run `dotnet ef database update` in CompilerApp folder
