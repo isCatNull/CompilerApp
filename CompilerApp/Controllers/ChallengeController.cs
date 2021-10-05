@@ -31,7 +31,7 @@ namespace ConstrolerApp.Controllers
             var response = await _compilerService.CompileAsync(request);
 
             var summary = MapCompilationSummary(challengeForm, response);
-            _dataContext.Summaries.Add(summary);
+            _dataContext.Summaries!.Add(summary);
             await _dataContext.SaveChangesAsync();
 
             return Ok(response);

@@ -55,41 +55,40 @@ export class Challenge extends Component {
                 <h1>Coding challenge</h1>
                 <br></br>
                 <form onSubmit={this.handleSubmit}>
-                    <div className="form-group row">
-                        <label htmlFor="requestName" className="col-sm-2 col-form-label">NAME</label>
-                        <div className="col-sm-10">
-                            <input type="name" name="requestName" onChange={this.handleChange} id="requestName" />
-                        </div>
+                    <div className="form-group">
+                        <label htmlFor="requestName">Name</label>
+                        <input type="name" name="requestName" className="form-control" onChange={this.handleChange} id="requestName" />
                     </div>
 
-                    <div className="form-group row">
-                        <label htmlFor="task" className="col-sm-2 col-form-label">SELECT TASK</label>
-                        <div className="col-sm-10">
-                            <select className="form-control" id="task">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </select>
-                        </div>
+                    <div className="form-group">
+                        <label htmlFor="task">Task</label>
+                        <select className="form-control" id="task">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
                     </div>
 
-                    <div className="form-group row">
-                        <label htmlFor="description" className="col-sm-2 col-form-label">DESCRIPTION</label>
-                        <textarea id="description" className="col-sm-10" readOnly={true} value={'Please enter Python script.'}></textarea>
+                    <div className="form-group">
+                        <label htmlFor="description">Description</label>
+                        <p id="description" className="text-info" readOnly={true}>{'Please enter Python script'}</p>
                     </div>
-                    <div className="form-group row">
-                        <label htmlFor="requestSourceCode" className="col-sm-2 col-form-label">SOLUTION CODE</label>
-                        <textarea className="col-sm-10" value={this.state.requestSourceCode} name="requestSourceCode" onChange={this.handleChange} id="requestSourceCode" rows="3"></textarea>
+
+                    <div className="form-group">
+                        <label htmlFor="requestSourceCode">Solution code</label>
+                        <textarea className="form-control" value={this.state.requestSourceCode} name="requestSourceCode" onChange={this.handleChange} id="requestSourceCode"></textarea>
                     </div>
+
                     <button type="submit" className="btn btn-primary">Submit</button>
                 </form>
 
                 <br></br>
-                <div>
-                    <label htmlFor="responseOutput" className="col-sm-2 col-form-label">OUTPUT</label>
-                    <textarea id="responseOutput" className="col-sm-10" readOnly={true} value={this.state.responseOutput}></textarea>
+
+                <div className="form-group">
+                    <label htmlFor="responseOutput">Output</label>
+                    <textarea className="form-control" id="responseOutput" readOnly={true} value={this.state.responseOutput} />
                 </div>
             </div>
         );
